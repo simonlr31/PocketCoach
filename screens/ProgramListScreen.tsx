@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList, Alert } from "react-native";
 
 import { Text, View } from "../components/Themed";
 
@@ -68,33 +68,37 @@ class ProgramListScreen extends React.Component<
 
   //lorsque le swictch d'une séance change, on met à jour les informations en base de donnée
   onSwitchChange = (idSeance: string) => {
-    if (this.state.curentUser != null) {
-      if (
-        (this.state.curentUser.id_seances.find(
-          (seance) => seance == idSeance
-        ) || null) == null
-      ) {
-        var seances_id: Array<string> = [
-          idSeance,
-          ...this.state.curentUser.id_seances,
-        ];
-        if (this.state.curentUser.id != null)
-          UtilisateurFirestoreService.onToggleSeance(
-            this.state.curentUser.id,
-            seances_id
-          );
-      } else {
-        var seances_id: Array<string> = this.state.curentUser.id_seances.filter(
-          (seance) => seance != idSeance
-        );
-        if (this.state.curentUser.id != null)
-          UtilisateurFirestoreService.onToggleSeance(
-            this.state.curentUser.id,
-            seances_id
-          );
-      }
-      this.loadUser();
-    }
+    // if (this.state.curentUser != null) {
+    //   if (
+    //     (this.state.curentUser.id_seances.find(
+    //       (seance) => seance == idSeance
+    //     ) || null) == null
+    //   ) {
+    //     var seances_id: Array<string> = [
+    //       idSeance,
+    //       ...this.state.curentUser.id_seances,
+    //     ];
+    //     if (this.state.curentUser.id != null)
+    //       UtilisateurFirestoreService.onToggleSeance(
+    //         this.state.curentUser.id,
+    //         seances_id
+    //       );
+    //   } else {
+    //     var seances_id: Array<string> = this.state.curentUser.id_seances.filter(
+    //       (seance) => seance != idSeance
+    //     );
+    //     if (this.state.curentUser.id != null)
+    //       UtilisateurFirestoreService.onToggleSeance(
+    //         this.state.curentUser.id,
+    //         seances_id
+    //       );
+    //   }
+    //   this.loadUser();
+    // }
+    Alert.alert(
+      "Désolé",
+      "vous ne pouvez modifier l'état d'une séance seulement depuis la page du programme correspondant"
+    );
   };
 
   //on récupère depuis la base de donnée l'utilisateur connecté

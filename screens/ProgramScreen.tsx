@@ -89,7 +89,7 @@ class ProgramScreen extends React.Component<
               style={[styles.buttonContainer, styles.buyButton]}
             >
               <Text style={styles.buy}>Acheter</Text>
-              <Text>
+              <Text style={{ color: "white" }}>
                 <Ionicons size={30} name="cart-outline" />
               </Text>
             </TouchableOpacity>

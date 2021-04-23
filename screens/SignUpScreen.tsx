@@ -78,42 +78,48 @@ export default class AuthForm extends Component<AuthFormProps, AuthFormState> {
 
   //Pour l'inscicription, on fait appel à la fonction de firebase grace a l'email et mot de passe entré + on enregistre en base de données les infromation supplémentaires relative à l'utilisateur
   signUp = () => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.mail, this.state.password)
-      .then((userCredential) => {
-        // Signed in
-        const user: Utilisateur = {
-          id: userCredential.user?.uid,
-          nom: this.state.nom,
-          prenom: this.state.prenom,
-          age: this.state.age,
-          poids: this.state.poids,
-          mail: this.state.mail,
-          id_programmes: [],
-          id_seances: [],
-        };
-        if (
-          user.nom != "" &&
-          user.prenom != "" &&
-          user.age != 0 &&
-          user.poids != 0 &&
-          this.state.passwordConfirmation == this.state.password
-        ) {
+    if (
+      this.state.nom != "" &&
+      this.state.prenom != "" &&
+      this.state.age != 0 &&
+      this.state.poids != 0 &&
+      this.state.passwordConfirmation == this.state.password
+    ) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.state.mail, this.state.password)
+        .then((userCredential) => {
+          // Signed in
+          const user: Utilisateur = {
+            id: userCredential.user?.uid,
+            nom: this.state.nom,
+            prenom: this.state.prenom,
+            age: this.state.age,
+            poids: this.state.poids,
+            mail: this.state.mail,
+            id_programmes: [],
+            id_seances: [],
+          };
           UtilisateurFireStoreService.addUtilisateurWithId(user);
           Alert.alert("Bienvenue", "Votre compte a bien été créé");
           this.props.navigation.navigate("Loggin");
-        } else if (this.state.passwordConfirmation == this.state.password) {
-          Alert.alert("Erreur", "Les mots de passe doivent être identiques");
-        }
-        // ...
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        Alert.alert(errorCode, errorMessage);
-        // ..
-      });
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          Alert.alert(errorCode, errorMessage);
+          // ..
+        });
+    } else if (
+      this.state.nom == "" ||
+      this.state.prenom == "" ||
+      this.state.age == 0 ||
+      this.state.poids == 0
+    ) {
+      Alert.alert("Erreur", "Tous les champs sont obligatoires");
+    } else {
+      Alert.alert("Erreur", "Les mots de passe doivent être identiques");
+    }
   };
 
   //La page se présente comme une succession d'input correspondante aux information a renseigner par l'utilisateur et en bas le bouton d'incription. Tout en haut l'image de l'application
